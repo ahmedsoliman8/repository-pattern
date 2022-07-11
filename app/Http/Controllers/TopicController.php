@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
+use App\Repositories\Eloquent\Criteria\LatestFirst;
 use App\Repositories\Contracts\{
     TopicRepository, UserRepository
 };
@@ -23,7 +24,7 @@ class TopicController extends Controller
     public function index()
     {
 
-        $topics = $this->topics->delete(1);
-        return $topics;
+        $topics = $this->topics->withCriteria(new LatestFirst())->all();
+        return view('topics.index',compact('topics'));
     }
 }
