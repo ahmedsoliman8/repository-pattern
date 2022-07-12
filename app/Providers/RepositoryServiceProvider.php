@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Repositories\Contracts\{TopicRepository, UserRepository};
-use App\Repositories\Eloquent\{EloquentTopicRepository, EloquentUserRepository};
+use App\Repositories\Contracts\{AddressRepository, TopicRepository, UserRepository};
+use App\Repositories\Eloquent\{EloquentAddressRepository, EloquentTopicRepository, EloquentUserRepository};
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -27,5 +27,6 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(TopicRepository::class, EloquentTopicRepository::class);
         $this->app->bind(UserRepository::class, EloquentUserRepository::class);
+        $this->app->bind(AddressRepository::class, EloquentAddressRepository::class);
     }
 }

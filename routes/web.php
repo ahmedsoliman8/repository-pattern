@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::get('/', function () {
 
 
 Route::resource('/topics', TopicController::class );
+Route::resource('/addresses', AddressController::class );
 
 Auth::routes();
 

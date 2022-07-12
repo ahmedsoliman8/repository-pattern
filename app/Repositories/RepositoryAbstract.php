@@ -5,9 +5,10 @@ namespace App\Repositories;
 use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Criteria\CriteriaInterface;
 use App\Repositories\Exceptions\NoEntityDefined;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 
-abstract class  RepositoryAbstract implements RepositoryInterface,CriteriaInterface
+abstract class  RepositoryAbstract implements RepositoryInterface, CriteriaInterface
 {
 
     protected $entity;
@@ -26,7 +27,11 @@ abstract class  RepositoryAbstract implements RepositoryInterface,CriteriaInterf
 
     public function find($id)
     {
-        return $this->entity->find($id);
+        $model = $this->entity->find($id);
+        if (!$model) {
+            throw  (new ModelNotFoundException())->setModel(get_class($this->entity->getModel()), $id);
+        }
+        return $model;
     }
 
     public function findWhere($column, $value)
@@ -36,7 +41,11 @@ abstract class  RepositoryAbstract implements RepositoryInterface,CriteriaInterf
 
     public function findWhereFirst($column, $value)
     {
-        return $this->entity->where($column, $value)->first();
+        $model = $this->entity->where($column, $value)->first();
+        if (!$model) {
+            throw  (new ModelNotFoundException())->setModel(get_class($this->entity->getModel()));
+        }
+        return $model;
     }
 
     public function paginate($perPage = 10)
@@ -68,11 +77,11 @@ abstract class  RepositoryAbstract implements RepositoryInterface,CriteriaInterf
     }
 
 
-
-    public  function  withCriteria(...$criteria){
-        $criteria=Arr::flatten($criteria);
-        foreach ($criteria as $criterion){
-            $this->entity=$criterion->apply($this->entity);
+    public function withCriteria(...$criteria)
+    {
+        $criteria = Arr::flatten($criteria);
+        foreach ($criteria as $criterion) {
+            $this->entity = $criterion->apply($this->entity);
         }
         return $this;
     }

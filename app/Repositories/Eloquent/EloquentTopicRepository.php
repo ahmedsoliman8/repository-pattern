@@ -13,18 +13,10 @@ class  EloquentTopicRepository extends RepositoryAbstract implements TopicReposi
         return Topic::class;
     }
 
-    public function allLive()
-    {
-        return $this->entity->where('live', true)->get();
-    }
 
-    public function allLiveLatest()
-    {
-        return $this->entity->where('live', true)->latest()->get();
-    }
 
-    public function allLiveLatestPaginate($perPage=10)
+    public function findBySlug($slug)
     {
-        return $this->entity->where('live', true)->latest()->get();
+        return $this->findWhereFirst('slug', $slug);
     }
 }

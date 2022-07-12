@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
-use App\Repositories\Eloquent\Criteria\LatestFirst;
+use App\Repositories\Eloquent\Criteria\{ByUser, EagerLoad, IsLive, LatestFirst};
 use App\Repositories\Contracts\{
     TopicRepository, UserRepository
 };
@@ -24,7 +24,29 @@ class TopicController extends Controller
     public function index()
     {
 
-        $topics = $this->topics->withCriteria(new LatestFirst())->all();
-        return view('topics.index',compact('topics'));
+        $topics = $this->topics->withCriteria([
+            new LatestFirst(),
+            new IsLive(),
+            new ByUser(auth()->id()),
+            new EagerLoad(['posts', 'posts.user'])
+        ])->all();
+
+
+        return view('topics.index', compact('topics'));
     }
+
+      public function show($slug)
+       {
+           $topic = $this->topics->withCriteria(
+              new IsLive(),
+               new EagerLoad(['posts.user'])
+           )->findBySlug($slug);
+     
+           return view('topics.show', compact('topic'));
+       }
+
+
+
+
+
 }

@@ -2,7 +2,8 @@
 
 namespace App\Repositories\Contracts;
 
-interface  UserRepository
+interface  AddressRepository
 {
+
 
 }

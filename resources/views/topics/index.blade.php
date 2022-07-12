@@ -8,9 +8,18 @@
                     <div class="card-header">{{ __('Topics') }}</div>
 
                     <div class="card-body">
-                      @foreach($topics as  $topic)
-                          <p>{{$topic->title}}</p>
+                        @foreach($topics as  $topic)
+                            <h3>{{$topic->title}} <small>{{$topic->created_at->diffForHumans()}}</small></h3>
+                            @if(count($topic->posts)>0)
+                                <ul>
+                                    @foreach($topic->posts as  $post)
+                                        <li>{{$post->body}} - {{$post->user->name}}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         @endforeach
+
+
                     </div>
                 </div>
             </div>
